@@ -20,8 +20,8 @@ public abstract class BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    protected void openUrl(String url) {
-        driver.get(url);
+    protected void openUrl(String url, String path) {
+        driver.get(url + path);
     }
 
     public String getTitle() {

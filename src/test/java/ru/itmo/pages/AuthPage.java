@@ -7,7 +7,7 @@ import ru.itmo.Config;
 import ru.itmo.core.BasePage;
 
 public class AuthPage extends BasePage {
-    private static final String PAGE_URL = "https://wordpress.com/log-in/";
+    private static final String PAGE_PATH = "/log-in/";
 
     @FindBy(xpath = "//input[contains(@autocomplete, 'username')]")
     private WebElement usernameInput;
@@ -23,7 +23,7 @@ public class AuthPage extends BasePage {
     }
 
     public AuthPage open() {
-        openUrl(PAGE_URL);
+        openUrl(Config.get("base.url"), PAGE_PATH);
 
         return this;
     }

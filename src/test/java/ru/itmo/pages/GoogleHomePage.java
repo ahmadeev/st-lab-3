@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.itmo.core.BasePage;
 
 public class GoogleHomePage extends BasePage {
-    private static final String PAGE_URL = "https://www.google.com/ncr";
+    private static final String PAGE_PATH = "/ncr";
 
     @FindBy(xpath = "//textarea[@name='q']")
     private WebElement searchField;
@@ -17,7 +17,7 @@ public class GoogleHomePage extends BasePage {
     }
 
     public GoogleHomePage open() {
-        openUrl(PAGE_URL);
+        openUrl("https://www.google.com", PAGE_PATH);
 
         return this;
     }

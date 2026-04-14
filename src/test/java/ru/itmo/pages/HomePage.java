@@ -3,10 +3,11 @@ package ru.itmo.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import ru.itmo.Config;
 import ru.itmo.core.BasePage;
 
 public class HomePage extends BasePage {
-    private static final String PAGE_URL = "https://wordpress.com/";
+    private static final String PAGE_PATH = "/";
 
     @FindBy(xpath = "//div/a[contains(@href, 'onboarding')]")
     private WebElement ctaButton;
@@ -16,7 +17,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage open() {
-        openUrl(PAGE_URL);
+        openUrl(Config.get("base.url"), PAGE_PATH);
 
         return this;
     }

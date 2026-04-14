@@ -3,11 +3,11 @@ package ru.itmo.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.itmo.BaseTest;
+import ru.itmo.Config;
 import ru.itmo.core.BasePage;
 
 public class AdminPage extends BasePage {
-    private static final String PAGE_URL = "https://wordpress.com/sites/";
+    private static final String PAGE_PATH = "/sites/";
 
     @FindBy(xpath = "//div[contains(@class, 'sidebar')]//a[contains(@href, 'domains')]")
     private WebElement domainsLink;
@@ -17,14 +17,14 @@ public class AdminPage extends BasePage {
     }
 
     public AdminPage open() {
-        openUrl(PAGE_URL);
+        openUrl(Config.get("base.url"), PAGE_PATH);
 
         return this;
     }
 
     public boolean isCurrentPage() {
         try {
-            return driver.getCurrentUrl().startsWith(PAGE_URL);
+            return driver.getCurrentUrl().startsWith(Config.get("base.url") + PAGE_PATH);
         } catch (Exception e) {
             return false;
         }
