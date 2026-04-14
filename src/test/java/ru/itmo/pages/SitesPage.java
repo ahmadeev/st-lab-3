@@ -1,11 +1,10 @@
 package ru.itmo.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.itmo.Config;
 import ru.itmo.BasePage;
+import ru.itmo.Config;
 
 public class SitesPage extends BasePage {
     private static final String PAGE_PATH = "/sites";
@@ -30,7 +29,7 @@ public class SitesPage extends BasePage {
     }
 
     public boolean isLoaded() {
-        return waitUntilUrlContains(PAGE_PATH);
+        return driver.getCurrentUrl().contains(PAGE_PATH);
     }
 
     public SitesPage showDropdown() {
@@ -53,48 +52,5 @@ public class SitesPage extends BasePage {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    protected boolean isLoginPageWithContinueVisible() {
-        By xpath = By.xpath("//div[contains(@class, 'login')]//a[contains(text(), 'Продолжить')]");
-
-        return driver.findElement(xpath).isDisplayed();
-    }
-
-    public void handleLoginPageWithContinue() {
-        By xpath = By.xpath("//div[contains(@class, 'login')]//a[contains(text(), 'Продолжить')]");
-
-        waitUntilClickable(xpath).click();
-    }
-
-    public void navigateToChatFromCreateSite() {
-        showDropdown().clickCreateSiteLink();
-
-        for (int i = 0; i < 5; i++) {
-            if (isNavigatedToChat()) {
-                return;
-            }
-
-            if (isAuthErrorVisible()) {
-                handleAuthError();
-                continue;
-            }
-
-            if (isCookieBannerVisible()) {
-                handleCookieBanner();
-                continue;
-            }
-
-            if (isModalWindowVisible()) {
-                handleModalWindow();
-                continue;
-            }
-
-            if (isLoginPageWithContinueVisible()) {
-                handleLoginPageWithContinue();
-            }
-        }
-
-        throw new IllegalStateException("Failed to reach chat page: unknown state after create site flow");
     }
 }
