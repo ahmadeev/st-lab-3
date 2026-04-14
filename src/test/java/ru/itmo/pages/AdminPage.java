@@ -1,5 +1,8 @@
 package ru.itmo.pages;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,9 +11,6 @@ import ru.itmo.core.BasePage;
 
 public class AdminPage extends BasePage {
     private static final String PAGE_PATH = "/sites/";
-
-    @FindBy(xpath = "//div[contains(@class, 'sidebar')]//a[contains(@href, 'domains')]")
-    private WebElement domainsLink;
 
     public AdminPage(WebDriver driver) {
         super(driver);
@@ -22,23 +22,39 @@ public class AdminPage extends BasePage {
         return this;
     }
 
-    public boolean isCurrentPage() {
-        try {
-            return driver.getCurrentUrl().startsWith(Config.get("base.url") + PAGE_PATH);
-        } catch (Exception e) {
+    public boolean isLoaded() {
+        String currentUrl = driver.getCurrentUrl();
+
+        if (currentUrl == null) {
             return false;
         }
+
+        String url = Config.get("base.url") + PAGE_PATH;
+
+        return currentUrl.startsWith(url);
     }
 
-    public boolean isLoaded() {
-        return domainsLink.isDisplayed();
+    public void clickLinkTo(Links link) {
+        String xpath = String.format(
+                "//div[contains(@class, 'sidebar')]//a[contains(@href, '%s')]",
+                link.getHrefPart()
+        );
+
+        waitUntilVisible(By.xpath(xpath)).click();
     }
 
-    public void clickDomainsLink() {
-        waitUntilVisible(domainsLink).click();
+    public boolean isNavigatedTo(Links link) {
+        return waitUntilUrlContains(link.getHrefPart());
     }
 
-    public boolean isNavigated() {
-        return waitUntilUrlContains("domains");
+    @RequiredArgsConstructor
+    @Getter
+    public enum Links {
+        SITES("sites"),
+        DOMAINS("domains"),
+        THEMES("themes"),
+        PLUGINS("plugins");
+
+        private final String hrefPart;
     }
 }

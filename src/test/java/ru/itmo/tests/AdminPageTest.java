@@ -10,12 +10,13 @@ public class AdminPageTest extends AuthBaseTest {
     void shouldNavigate() {
         AdminPage page = new AdminPage(driver);
 
-        if (!page.isCurrentPage()) {
+        if (!page.isLoaded()) {
             page.open();
         }
 
-        page.clickDomainsLink();
-
-        Assertions.assertTrue(page.isNavigated());
+        for (AdminPage.Links link : AdminPage.Links.values()) {
+            page.clickLinkTo(link);
+            Assertions.assertTrue(page.isNavigatedTo(link));
+        }
     }
 }
