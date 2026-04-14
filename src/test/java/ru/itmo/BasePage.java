@@ -1,6 +1,4 @@
-package ru.itmo.core;
-
-import java.time.Duration;
+package ru.itmo;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public abstract class BasePage {
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
@@ -36,6 +36,14 @@ public abstract class BasePage {
 
     protected WebElement waitUntilVisible(WebElement element) {
         return wait.until(ExpectedConditions.visibilityOf(element));
+    }
+
+    protected boolean waitUntilInvisible(By locator) {
+        return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
+
+    protected WebElement waitUntilClickable(By locator) {
+        return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
     protected WebElement waitUntilClickable(WebElement element) {

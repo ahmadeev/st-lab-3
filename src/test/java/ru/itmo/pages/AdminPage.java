@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import ru.itmo.Config;
-import ru.itmo.core.BasePage;
+import ru.itmo.BasePage;
 
 public class AdminPage extends BasePage {
     private static final String PAGE_PATH = "/sites/";

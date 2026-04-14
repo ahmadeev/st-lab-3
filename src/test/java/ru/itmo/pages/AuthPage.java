@@ -4,10 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.itmo.Config;
-import ru.itmo.core.BasePage;
+import ru.itmo.BasePage;
 
 public class AuthPage extends BasePage {
-    private static final String PAGE_PATH = "/log-in/";
+    private static final String PAGE_PATH = "/log-in";
 
     @FindBy(xpath = "//input[contains(@autocomplete, 'username')]")
     private WebElement usernameInput;

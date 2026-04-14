@@ -4,10 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.itmo.Config;
-import ru.itmo.core.BasePage;
+import ru.itmo.BasePage;
 
 public class HomePage extends BasePage {
-    private static final String PAGE_PATH = "/";
+    private static final String PAGE_PATH = "";
 
     @FindBy(xpath = "//div/a[contains(@href, 'onboarding')]")
     private WebElement ctaButton;

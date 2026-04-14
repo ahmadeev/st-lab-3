@@ -18,7 +18,7 @@ public class HomePageTest extends BaseTest {
     void shouldNavigate() {
         HomePage homePage = new HomePage(driver).open();
 
-        Assertions.assertTrue(homePage.isLoaded());
+        Assertions.assertTrue(homePage.isLoaded()); // notes: ?
 
         homePage.clickCta();
 

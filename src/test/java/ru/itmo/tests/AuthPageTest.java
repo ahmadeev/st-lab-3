@@ -18,7 +18,7 @@ public class AuthPageTest extends BaseTest {
     void shouldLogIn() {
         AuthPage page = new AuthPage(driver).open();
 
-        Assertions.assertTrue(page.isLoaded());
+        Assertions.assertTrue(page.isLoaded()); // notes: ?
 
         page.logIn();
 

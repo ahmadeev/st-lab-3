@@ -4,7 +4,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.itmo.core.BasePage;
+import ru.itmo.BasePage;
 
 public class GoogleHomePage extends BasePage {
     private static final String PAGE_PATH = "/ncr";
