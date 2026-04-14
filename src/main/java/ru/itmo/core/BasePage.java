@@ -40,6 +40,10 @@ public abstract class BasePage {
         return wait.until(ExpectedConditions.titleContains(value));
     }
 
+    protected boolean waitUntilTitleDoesNotContain(String value) {
+        return wait.until(ExpectedConditions.not(ExpectedConditions.titleContains(value)));
+    }
+
     protected boolean waitUntilUrlContains(String value) {
         return wait.until(ExpectedConditions.urlContains(value));
     }

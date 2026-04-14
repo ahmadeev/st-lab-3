@@ -16,7 +16,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage open() {
-        driver.get(PAGE_URL);
+        openUrl(PAGE_URL);
 
         return this;
     }

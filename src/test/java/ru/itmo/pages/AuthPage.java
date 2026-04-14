@@ -23,7 +23,7 @@ public class AuthPage extends BasePage {
     }
 
     public AuthPage open() {
-        driver.get(PAGE_URL);
+        openUrl(PAGE_URL);
 
         return this;
     }
@@ -33,13 +33,34 @@ public class AuthPage extends BasePage {
     }
 
     public void logIn() {
-        waitUntilVisible(usernameInput).sendKeys(Config.get("EMAIL"));
+        this.enterEmail(Config.get("email"))
+                .clickSubmit()
+                .enterPassword(Config.get("password"))
+                .clickSubmit();
+    }
 
-        submitButton.click();
+    public AuthPage enterEmail(String email) {
+        waitUntilVisible(usernameInput).clear();
+        usernameInput.sendKeys(email);
 
-        waitUntilVisible(passwordInput).sendKeys(Config.get("PASSWORD"));
+        return this;
+    }
 
-        submitButton.click();
+    public AuthPage enterPassword(String password) {
+        waitUntilVisible(passwordInput).clear();
+        passwordInput.sendKeys(password);
+
+        return this;
+    }
+
+    public AuthPage clickSubmit() {
+        waitUntilClickable(submitButton).click();
+
+        return this;
+    }
+
+    public boolean waitUntilAuthorized() {
+        return waitUntilTitleDoesNotContain("Log In");
     }
 
     public boolean isNavigated() {
