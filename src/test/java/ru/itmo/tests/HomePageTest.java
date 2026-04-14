@@ -22,6 +22,6 @@ public class HomePageTest extends BaseTest {
 
         homePage.clickCta();
 
-        Assertions.assertTrue(homePage.isOnboardingPageOpened());
+        Assertions.assertTrue(homePage.isNavigated());
     }
 }

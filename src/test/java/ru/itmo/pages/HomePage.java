@@ -29,7 +29,7 @@ public class HomePage extends BasePage {
         ctaButton.click();
     }
 
-    public boolean isOnboardingPageOpened() {
+    public boolean isNavigated() {
         return waitUntilUrlContains("onboarding");
     }
 }
