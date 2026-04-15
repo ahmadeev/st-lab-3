@@ -1,4 +1,4 @@
-package ru.itmo.support;
+package ru.itmo.session;
 
 import org.openqa.selenium.WebDriver;
 import ru.itmo.pages.AuthPage;
