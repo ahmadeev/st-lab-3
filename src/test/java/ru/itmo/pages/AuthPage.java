@@ -62,8 +62,4 @@ public class AuthPage extends BasePage {
     public boolean waitUntilAuthorized() {
         return waitUntilTitleDoesNotContain("Log In");
     }
-
-    public boolean isNavigated() {
-        return waitUntilUrlContains("sites");
-    }
 }

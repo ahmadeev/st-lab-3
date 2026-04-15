@@ -61,4 +61,8 @@ public abstract class BasePage {
     protected boolean waitUntilUrlContains(String value) {
         return wait.until(ExpectedConditions.urlContains(value));
     }
+
+    protected boolean waitUntilUrlDoesNotContain(String value) {
+        return wait.until(ExpectedConditions.not(ExpectedConditions.urlContains(value)));
+    }
 }

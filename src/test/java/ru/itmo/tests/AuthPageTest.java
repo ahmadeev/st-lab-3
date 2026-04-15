@@ -22,6 +22,6 @@ public class AuthPageTest extends BaseTest {
 
         page.logIn();
 
-        Assertions.assertTrue(page.isNavigated());
+        Assertions.assertTrue(page.waitUntilAuthorized());
     }
 }

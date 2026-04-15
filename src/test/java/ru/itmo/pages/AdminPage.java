@@ -4,8 +4,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.itmo.Config;
 import ru.itmo.BasePage;
+
+import java.time.Duration;
 
 public class AdminPage extends BasePage {
     private static final String PAGE_PATH = "/sites/";
@@ -33,12 +37,17 @@ public class AdminPage extends BasePage {
     }
 
     public void clickLinkTo(Links link) {
-        String xpath = String.format(
+        String navLink = String.format(
                 "//div[contains(@class, 'sidebar')]//a[contains(@href, '%s')]",
                 link.getHrefPart()
         );
+        String activeNavLink = String.format(
+                "//div[contains(@class, 'sidebar')]//li[contains(@class, 'selected')]//a[contains(@href, '%s')]",
+                link.getHrefPart()
+        );
 
-        waitUntilVisible(By.xpath(xpath)).click();
+        waitUntilClickable(By.xpath(navLink)).click();
+        waitUntilVisible(By.xpath(activeNavLink));
     }
 
     public boolean isNavigatedTo(Links link) {
