@@ -4,11 +4,15 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import ru.itmo.framework.config.TestConfig;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import ru.itmo.framework.page.BasePage;
 
 public class AdminPage extends BasePage {
     private static final String PAGE_PATH = "/sites/";
+
+    @FindBy(xpath = "//div[contains(@class, 'sidebar')]")
+    private WebElement sidebar;
 
     public AdminPage(WebDriver driver) {
         super(driver);
@@ -21,15 +25,7 @@ public class AdminPage extends BasePage {
     }
 
     public boolean isLoaded() {
-        String currentUrl = currentUrl();
-
-        if (currentUrl == null) {
-            return false;
-        }
-
-        String url = TestConfig.get("base.url") + PAGE_PATH;
-
-        return currentUrl.startsWith(url);
+        return visible(sidebar).isDisplayed();
     }
 
     public void clickLinkTo(Links link) {

@@ -37,7 +37,7 @@ public class ThemesPage extends BasePage {
     }
 
     public boolean isLoaded() {
-        return driver.getCurrentUrl().contains(PAGE_PATH);
+        return visible(selectTrigger).isDisplayed();
     }
 
     public void previewFirstFreeTheme() {

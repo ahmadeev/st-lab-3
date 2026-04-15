@@ -28,7 +28,7 @@ public class SitesPage extends BasePage {
     }
 
     public boolean isLoaded() {
-        return currentUrl().contains(PAGE_PATH);
+        return visible(dropdownButton).isDisplayed();
     }
 
     public SitesPage startSiteCreation() {
