@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import ru.itmo.BasePage;
-import ru.itmo.Config;
+import ru.itmo.framework.config.TestConfig;
+import ru.itmo.framework.page.BasePage;
 
 public class AdminPage extends BasePage {
     private static final String PAGE_PATH = "/sites/";
@@ -15,19 +15,19 @@ public class AdminPage extends BasePage {
     }
 
     public AdminPage open() {
-        openUrl(Config.get("base.url"), PAGE_PATH);
+        open(PAGE_PATH);
 
         return this;
     }
 
     public boolean isLoaded() {
-        String currentUrl = driver.getCurrentUrl();
+        String currentUrl = currentUrl();
 
         if (currentUrl == null) {
             return false;
         }
 
-        String url = Config.get("base.url") + PAGE_PATH;
+        String url = TestConfig.get("base.url") + PAGE_PATH;
 
         return currentUrl.startsWith(url);
     }
@@ -42,12 +42,12 @@ public class AdminPage extends BasePage {
                 link.getHrefPart()
         );
 
-        waitUntilClickable(By.xpath(navLink)).click();
-        waitUntilVisible(By.xpath(activeNavLink));
+        clickable(By.xpath(navLink)).click();
+        visible(By.xpath(activeNavLink));
     }
 
     public boolean isNavigatedTo(Links link) {
-        return waitUntilUrlContains(link.getHrefPart());
+        return urlContains(link.getHrefPart());
     }
 
     @RequiredArgsConstructor

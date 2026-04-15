@@ -1,20 +1,20 @@
-package ru.itmo;
+package ru.itmo.support;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
-import ru.itmo.core.DriverFactory;
+import ru.itmo.framework.driver.DriverFactory;
 
 public abstract class BaseTest {
     protected WebDriver driver;
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
         driver = DriverFactory.createChromeDriver();
     }
 
     @AfterEach
-    void tearDown() {
+    protected void tearDown() {
         if (driver != null) {
             driver.quit();
         }

@@ -1,12 +1,16 @@
-package ru.itmo;
+package ru.itmo.support;
 
-import lombok.NoArgsConstructor;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.itmo.framework.config.TestConfig;
 import ru.itmo.pages.AuthPage;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -16,10 +20,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@NoArgsConstructor
 public final class SessionManager {
     private static final Path COOKIES_FILE = Path.of("target", "session-cookies.bin");
-    private static final Duration AUTH_WAIT_TIMEOUT = Duration.ofSeconds(15);
+    private static final Duration AUTH_WAIT_TIMEOUT = TestConfig.getDurationSeconds("auth.timeout.seconds", 15);
+
+    private SessionManager() {
+    }
 
     public static void ensureLoggedIn(WebDriver driver) {
         Objects.requireNonNull(driver, "driver must not be null");
@@ -28,8 +34,14 @@ public final class SessionManager {
             return;
         }
 
-        loginViaUi(driver);
-        saveCookies(driver);
+        loginAndPersist(driver);
+    }
+
+    public static void relogin(WebDriver driver) {
+        Objects.requireNonNull(driver, "driver must not be null");
+
+        clearSavedSession();
+        loginAndPersist(driver);
     }
 
     public static boolean tryRestoreSession(WebDriver driver) {
@@ -39,13 +51,14 @@ public final class SessionManager {
             return false;
         }
 
-        driver.get(Config.get("base.url"));
+        driver.get(TestConfig.get("base.url"));
         driver.manage().deleteAllCookies();
 
         for (Cookie cookie : filterValidCookies(cookies)) {
             try {
                 driver.manage().addCookie(cookie);
-            } catch (Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
 
         driver.navigate().refresh();
@@ -53,14 +66,27 @@ public final class SessionManager {
         return isAuthenticated(driver);
     }
 
-    public static void loginViaUi(WebDriver driver) {
+    public static void clearSavedSession() {
+        try {
+            Files.deleteIfExists(COOKIES_FILE);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete " + COOKIES_FILE, e);
+        }
+    }
+
+    private static void loginAndPersist(WebDriver driver) {
+        loginViaUi(driver);
+        saveCookies(driver);
+    }
+
+    private static void loginViaUi(WebDriver driver) {
         driver.manage().deleteAllCookies();
 
         AuthPage loginPage = new AuthPage(driver)
                 .open()
-                .enterEmail(Config.get("email"))
+                .enterEmail(TestConfig.get("email"))
                 .clickSubmit()
-                .enterPassword(Config.get("password"))
+                .enterPassword(TestConfig.get("password"))
                 .clickSubmit();
 
         if (!loginPage.waitUntilAuthorized()) {
@@ -68,7 +94,7 @@ public final class SessionManager {
         }
     }
 
-    public static void saveCookies(WebDriver driver) {
+    private static void saveCookies(WebDriver driver) {
         Set<SerializableCookie> cookies = driver.manage().getCookies().stream()
                 .map(SerializableCookie::from)
                 .collect(Collectors.toCollection(HashSet::new));
@@ -81,14 +107,6 @@ public final class SessionManager {
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to save cookies to " + COOKIES_FILE, e);
-        }
-    }
-
-    public static void clearSavedSession() {
-        try {
-            Files.deleteIfExists(COOKIES_FILE);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to delete " + COOKIES_FILE, e);
         }
     }
 
@@ -151,32 +169,32 @@ public final class SessionManager {
         @Serial
         private static final long serialVersionUID = 1L;
 
-        static SerializableCookie from(Cookie cookie) {
-                return new SerializableCookie(
-                        cookie.getName(),
-                        cookie.getValue(),
-                        cookie.getDomain(),
-                        cookie.getPath(),
-                        cookie.getExpiry() == null ? null : cookie.getExpiry().getTime(),
-                        cookie.isSecure(),
-                        cookie.isHttpOnly(),
-                        cookie.getSameSite()
-                );
-            }
-
-            Cookie toSeleniumCookie() {
-                Date expiry = expiryEpochMillis == null ? null : new Date(expiryEpochMillis);
-
-                return new Cookie(
-                        name,
-                        value,
-                        domain,
-                        path,
-                        expiry,
-                        secure,
-                        httpOnly,
-                        sameSite
-                );
-            }
+        private static SerializableCookie from(Cookie cookie) {
+            return new SerializableCookie(
+                    cookie.getName(),
+                    cookie.getValue(),
+                    cookie.getDomain(),
+                    cookie.getPath(),
+                    cookie.getExpiry() == null ? null : cookie.getExpiry().getTime(),
+                    cookie.isSecure(),
+                    cookie.isHttpOnly(),
+                    cookie.getSameSite()
+            );
         }
+
+        private Cookie toSeleniumCookie() {
+            Date expiry = expiryEpochMillis == null ? null : new Date(expiryEpochMillis);
+
+            return new Cookie(
+                    name,
+                    value,
+                    domain,
+                    path,
+                    expiry,
+                    secure,
+                    httpOnly,
+                    sameSite
+            );
+        }
+    }
 }

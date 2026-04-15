@@ -3,8 +3,8 @@ package ru.itmo.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.itmo.Config;
-import ru.itmo.BasePage;
+import ru.itmo.framework.config.TestConfig;
+import ru.itmo.framework.page.BasePage;
 
 public class AuthPage extends BasePage {
     private static final String PAGE_PATH = "/log-in";
@@ -23,43 +23,43 @@ public class AuthPage extends BasePage {
     }
 
     public AuthPage open() {
-        openUrl(Config.get("base.url"), PAGE_PATH);
+        open(PAGE_PATH);
 
         return this;
     }
 
     public boolean isLoaded() {
-        return usernameInput.isDisplayed();
+        return visible(usernameInput).isDisplayed();
     }
 
     public void logIn() {
-        this.enterEmail(Config.get("email"))
+        enterEmail(TestConfig.get("email"))
                 .clickSubmit()
-                .enterPassword(Config.get("password"))
+                .enterPassword(TestConfig.get("password"))
                 .clickSubmit();
     }
 
     public AuthPage enterEmail(String email) {
-        waitUntilVisible(usernameInput).clear();
+        visible(usernameInput).clear();
         usernameInput.sendKeys(email);
 
         return this;
     }
 
     public AuthPage enterPassword(String password) {
-        waitUntilVisible(passwordInput).clear();
+        visible(passwordInput).clear();
         passwordInput.sendKeys(password);
 
         return this;
     }
 
     public AuthPage clickSubmit() {
-        waitUntilClickable(submitButton).click();
+        clickable(submitButton).click();
 
         return this;
     }
 
     public boolean waitUntilAuthorized() {
-        return waitUntilTitleDoesNotContain("Log In");
+        return titleDoesNotContain("Log In");
     }
 }

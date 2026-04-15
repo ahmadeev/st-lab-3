@@ -3,8 +3,7 @@ package ru.itmo.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.itmo.BasePage;
-import ru.itmo.Config;
+import ru.itmo.framework.page.BasePage;
 
 public class SitesPage extends BasePage {
     private static final String PAGE_PATH = "/sites";
@@ -23,30 +22,25 @@ public class SitesPage extends BasePage {
     }
 
     public SitesPage open() {
-        openUrl(Config.get("base.url"), PAGE_PATH);
+        open(PAGE_PATH);
 
         return this;
     }
 
     public boolean isLoaded() {
-        return driver.getCurrentUrl().contains(PAGE_PATH);
+        return currentUrl().contains(PAGE_PATH);
     }
 
-    public SitesPage showDropdown() {
-        waitUntilVisible(dropdownButton).click();
-
-        return this;
-    }
-
-    public SitesPage clickCreateSiteLink() {
-        waitUntilVisible(createSiteLink).click();
+    public SitesPage startSiteCreation() {
+        clickable(dropdownButton).click();
+        clickable(createSiteLink).click();
 
         return this;
     }
 
     public boolean isNavigatedToChat() {
         try {
-            waitUntilVisible(chatTextArea);
+            visible(chatTextArea);
 
             return true;
         } catch (Exception e) {

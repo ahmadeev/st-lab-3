@@ -4,7 +4,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.itmo.BasePage;
+import ru.itmo.framework.page.BasePage;
 
 public class GoogleHomePage extends BasePage {
     private static final String PAGE_PATH = "/ncr";
@@ -17,21 +17,21 @@ public class GoogleHomePage extends BasePage {
     }
 
     public GoogleHomePage open() {
-        openUrl("https://www.google.com", PAGE_PATH);
+        openAbsolute("https://www.google.com" + PAGE_PATH);
 
         return this;
     }
 
     public boolean isLoaded() {
-        return waitUntilVisible(searchField).isDisplayed();
+        return visible(searchField).isDisplayed();
     }
 
     public boolean isSearchFieldReady() {
-        return waitUntilClickable(searchField).isEnabled();
+        return clickable(searchField).isEnabled();
     }
 
     public void search(String query) {
-        WebElement field = waitUntilVisible(searchField);
+        WebElement field = visible(searchField);
 
         field.clear();
         field.sendKeys(query);
@@ -39,6 +39,6 @@ public class GoogleHomePage extends BasePage {
     }
 
     public boolean areResultsOpenedFor(String query) {
-        return waitUntilUrlContains("/search") && waitUntilTitleContains(query);
+        return urlContains("/search") && titleContains(query);
     }
 }

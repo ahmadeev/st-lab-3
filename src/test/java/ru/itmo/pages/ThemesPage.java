@@ -3,13 +3,13 @@ package ru.itmo.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.itmo.BasePage;
-import ru.itmo.Config;
+import ru.itmo.framework.page.BasePage;
 
 import java.time.Duration;
 
 public class ThemesPage extends BasePage {
     private static final String PAGE_PATH = "/theme";
+    private static final Duration PAGE_TIMEOUT = Duration.ofSeconds(20);
 
     @FindBy(xpath = "//div[contains(@class, 'theme')]//button[contains(@role, 'combobox')]")
     private WebElement selectTrigger;
@@ -26,12 +26,12 @@ public class ThemesPage extends BasePage {
     @FindBy(xpath = "//div[contains(@class, 'web-preview') and contains(@class, 'content')]")
     private WebElement previewModal;
 
-    public ThemesPage(WebDriver driver, Duration timeout) {
-        super(driver, timeout);
+    public ThemesPage(WebDriver driver) {
+        super(driver, PAGE_TIMEOUT);
     }
 
     public ThemesPage open() {
-        openUrl(Config.get("base.url"), PAGE_PATH);
+        open(PAGE_PATH);
 
         return this;
     }
@@ -40,37 +40,16 @@ public class ThemesPage extends BasePage {
         return driver.getCurrentUrl().contains(PAGE_PATH);
     }
 
-    public void previewTheme() {
-        showPopover().clickSelectOption().clickFirstItem().clickPreviewButton();
-    }
-
-    public ThemesPage showPopover() {
-        waitUntilClickable(selectTrigger).click();
-
-        return this;
-    }
-
-    public ThemesPage clickSelectOption() {
-        waitUntilClickable(selectOption).click();
-
-        return this;
-    }
-
-    public ThemesPage clickFirstItem() {
-        waitUntilClickable(firstItem).click();
-
-        return this;
-    }
-
-    public ThemesPage clickPreviewButton() {
-        waitUntilClickable(previewButton).click();
-
-        return this;
+    public void previewFirstFreeTheme() {
+        clickable(selectTrigger).click();
+        clickable(selectOption).click();
+        clickable(firstItem).click();
+        clickable(previewButton).click();
     }
 
     public boolean isPreviewed() {
         try {
-            waitUntilVisible(previewModal);
+            visible(previewModal);
 
             return true;
         } catch (Exception e) {

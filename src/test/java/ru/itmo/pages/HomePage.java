@@ -3,8 +3,7 @@ package ru.itmo.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import ru.itmo.Config;
-import ru.itmo.BasePage;
+import ru.itmo.framework.page.BasePage;
 
 public class HomePage extends BasePage {
     private static final String PAGE_PATH = "";
@@ -17,20 +16,20 @@ public class HomePage extends BasePage {
     }
 
     public HomePage open() {
-        openUrl(Config.get("base.url"), PAGE_PATH);
+        open(PAGE_PATH);
 
         return this;
     }
 
     public boolean isLoaded() {
-        return ctaButton.isDisplayed();
+        return visible(ctaButton).isDisplayed();
     }
 
     public void clickCta() {
-        ctaButton.click();
+        clickable(ctaButton).click();
     }
 
     public boolean isNavigated() {
-        return waitUntilUrlContains("onboarding");
+        return urlContains("onboarding");
     }
 }
