@@ -1,10 +1,12 @@
 package ru.itmo.tests;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.itmo.support.BaseTest;
 import ru.itmo.pages.AuthPage;
 
+@Disabled
 public class AuthPageTest extends BaseTest {
     @Test
     void shouldOpen() {

@@ -39,16 +39,9 @@ public final class SessionManager {
             return false;
         }
 
+        COOKIE_STORAGE.restore(driver, COOKIE_STORAGE.filterValid(cookies));
+
         driver.get(TestConfig.get("base.url"));
-        driver.manage().deleteAllCookies();
-
-        for (Cookie cookie : COOKIE_STORAGE.filterValid(cookies)) {
-            try {
-                driver.manage().addCookie(cookie);
-            } catch (Exception ignored) {
-            }
-        }
-
         driver.navigate().refresh();
 
         return AUTH_STATE_VERIFIER.isAuthenticated(driver);
