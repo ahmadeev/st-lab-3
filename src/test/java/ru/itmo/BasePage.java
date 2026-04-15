@@ -22,12 +22,23 @@ public abstract class BasePage {
         PageFactory.initElements(driver, this);
     }
 
+    protected BasePage(WebDriver driver, Duration timeout) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, timeout);
+
+        PageFactory.initElements(driver, this);
+    }
+
     protected void openUrl(String url, String path) {
         driver.get(url + path);
     }
 
     public String getTitle() {
         return driver.getTitle();
+    }
+
+    protected boolean waitUntilStale(WebElement element) {
+        return wait.until(ExpectedConditions.stalenessOf(element));
     }
 
     protected WebElement waitUntilVisible(By locator) {
