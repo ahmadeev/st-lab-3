@@ -4,12 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import ru.itmo.Config;
 import ru.itmo.BasePage;
-
-import java.time.Duration;
+import ru.itmo.Config;
 
 public class AdminPage extends BasePage {
     private static final String PAGE_PATH = "/sites/";

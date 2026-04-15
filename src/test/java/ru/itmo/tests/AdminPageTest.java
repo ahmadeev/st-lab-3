@@ -2,7 +2,6 @@ package ru.itmo.tests;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.itmo.AuthBaseTest;
 import ru.itmo.BaseTest;
 import ru.itmo.SessionManager;
 import ru.itmo.pages.AdminPage;
