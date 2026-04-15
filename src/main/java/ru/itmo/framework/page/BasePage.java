@@ -1,14 +1,13 @@
 package ru.itmo.framework.page;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.itmo.framework.config.TestConfig;
 
 import java.time.Duration;
+import java.util.List;
 
 public abstract class BasePage {
     private static final Duration DEFAULT_TIMEOUT = TestConfig.getDurationSeconds("page.timeout.seconds", 10);
@@ -29,6 +28,7 @@ public abstract class BasePage {
 
     protected void open(String path) {
         driver.get(TestConfig.get("base.url") + path);
+        closeCookieBannerIfPresent();
     }
 
     protected void openAbsolute(String url) {
@@ -69,5 +69,25 @@ public abstract class BasePage {
 
     protected boolean urlContains(String value) {
         return wait.until(ExpectedConditions.urlContains(value));
+    }
+
+    public void closeCookieBannerIfPresent() {
+        By acceptButton = By.xpath("//button[contains(., 'Принять') or contains(., 'Accept') or contains(., 'Соглас')]");
+
+        List<WebElement> buttons = driver.findElements(acceptButton);
+
+        if (buttons.isEmpty()) {
+            return;
+        }
+
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(acceptButton));
+
+            button.click();
+
+            wait.until(ExpectedConditions.invisibilityOf(button));
+        } catch (TimeoutException | ElementClickInterceptedException ignored) { }
     }
 }
