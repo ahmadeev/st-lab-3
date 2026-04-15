@@ -1,19 +1,19 @@
 package ru.itmo.tests;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import ru.itmo.support.BaseTest;
 import ru.itmo.pages.HomePage;
+import ru.itmo.support.BaseTest;
 
-@Disabled
 public class HomePageTest extends BaseTest {
     @Test
     void shouldOpen() {
-        HomePage homePage = new HomePage(driver).open();
+        HomePage page = new HomePage(driver);
 
-        Assertions.assertTrue(homePage.isLoaded());
-        Assertions.assertTrue(homePage.getTitle().contains("WordPress"));
+        page.open();
+
+        Assertions.assertTrue(page.isLoaded());
+        Assertions.assertTrue(page.getTitle().contains("WordPress"));
     }
 
     @Test

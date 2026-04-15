@@ -10,9 +10,7 @@ public class SitesPageTest extends AuthBaseTest {
     void shouldNavigate() {
         SitesPage page = new SitesPage(driver);
 
-        if (!page.isLoaded()) {
-            page.open();
-        }
+        page.open();
 
         page.startSiteCreation();
 

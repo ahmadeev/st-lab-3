@@ -10,9 +10,7 @@ public class ThemesPageTest extends AuthBaseTest {
     void shouldPreview() {
         ThemesPage page = new ThemesPage(driver);
 
-        if (!page.isLoaded()) {
-            page.open();
-        }
+        page.open();
 
         page.previewFirstFreeTheme();
 

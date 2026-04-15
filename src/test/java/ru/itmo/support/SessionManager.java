@@ -4,6 +4,7 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import ru.itmo.framework.config.TestConfig;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public final class SessionManager {
             return false;
         }
 
-        COOKIE_STORAGE.restore(driver, COOKIE_STORAGE.filterValid(cookies));
+        COOKIE_STORAGE.restore(driver, COOKIE_STORAGE.filterValid(cookies), cookieContexts());
 
         driver.get(TestConfig.get("base.url"));
         driver.navigate().refresh();
@@ -53,6 +54,13 @@ public final class SessionManager {
 
     private static void loginAndPersist(WebDriver driver) {
         LOGIN_FLOW.login(driver);
-        COOKIE_STORAGE.save(driver);
+        COOKIE_STORAGE.save(driver, cookieContexts());
+    }
+
+    private static List<String> cookieContexts() {
+        return List.of(
+                TestConfig.get("base.url") + "/sites",
+                "https://public-api.wordpress.com/wp-admin/rest-proxy/?v=2.0"
+        );
     }
 }

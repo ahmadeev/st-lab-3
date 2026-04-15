@@ -4,6 +4,8 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import ru.itmo.framework.config.TestConfig;
 
+import java.net.URI;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -11,39 +13,35 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 final class CookieStorage {
-    private static final String PUBLIC_API_URL = "https://public-api.wordpress.com/wp-admin/rest-proxy/?v=2.0";
-    private static final String SITES_URL_SUFFIX = "/sites";
-
     private volatile Set<Cookie> cachedCookies = Set.of();
 
     Set<Cookie> load() {
         return new HashSet<>(cachedCookies);
     }
 
-    void save(WebDriver driver) {
-        String previousUrl = driver.getCurrentUrl();
+    void save(WebDriver driver, Collection<String> contexts) {
         Set<Cookie> cookies = new LinkedHashSet<>();
 
-        cookies.addAll(readCookiesFor(driver, TestConfig.get("base.url") + SITES_URL_SUFFIX));
-        cookies.addAll(readCookiesFor(driver, PUBLIC_API_URL));
+        for (String contextUrl : contexts) {
+            Set<Cookie> contextCookies = readCookiesFor(driver, contextUrl);
+            cookies.addAll(contextCookies);
+        }
 
         cachedCookies = cookies;
 
-        if (previousUrl != null && !previousUrl.isBlank()) {
-            driver.get(previousUrl);
-        }
+        driver.get(TestConfig.get("base.url") + "/sites");
     }
 
     void clear() {
         cachedCookies = Set.of();
     }
 
-    void restore(WebDriver driver, Set<Cookie> cookies) {
-        driver.get(TestConfig.get("base.url"));
-        driver.manage().deleteAllCookies();
+    void restore(WebDriver driver, Set<Cookie> cookies, Collection<String> contexts) {
+        clearBrowserCookies(driver, contexts);
 
-        restoreFor(driver, TestConfig.get("base.url") + SITES_URL_SUFFIX, cookies);
-        restoreFor(driver, PUBLIC_API_URL, cookies);
+        for (String contextUrl : contexts) {
+            restoreFor(driver, contextUrl, cookies);
+        }
     }
 
     Set<Cookie> filterValid(Set<Cookie> cookies) {
@@ -62,14 +60,39 @@ final class CookieStorage {
         return new HashSet<>(driver.manage().getCookies());
     }
 
-    private void restoreFor(WebDriver driver, String url, Set<Cookie> cookies) {
-        driver.get(url);
+    private void clearBrowserCookies(WebDriver driver, Collection<String> contexts) {
+        for (String contextUrl : contexts) {
+            driver.get(contextUrl);
+            driver.manage().deleteAllCookies();
+        }
+    }
+
+    private void restoreFor(WebDriver driver, String contextUrl, Set<Cookie> cookies) {
+        String host = URI.create(contextUrl).getHost();
+
+        driver.get(contextUrl);
 
         for (Cookie cookie : cookies) {
+            if (!matchesContext(cookie, host)) {
+                continue;
+            }
+
             try {
                 driver.manage().addCookie(cookie);
             } catch (Exception ignored) {
             }
         }
+    }
+
+    private boolean matchesContext(Cookie cookie, String host) {
+        String domain = cookie.getDomain();
+
+        if (domain == null || domain.isBlank()) {
+            return false;
+        }
+
+        String normalizedDomain = domain.startsWith(".") ? domain.substring(1) : domain;
+
+        return host.equals(normalizedDomain) || host.endsWith("." + normalizedDomain);
     }
 }
