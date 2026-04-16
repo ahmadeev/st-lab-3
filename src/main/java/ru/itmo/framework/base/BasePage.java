@@ -1,11 +1,6 @@
 package ru.itmo.framework.base;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.itmo.framework.config.TestConfig;
@@ -99,5 +94,34 @@ public abstract class BasePage {
 
             shortWait.until(ExpectedConditions.invisibilityOf(button));
         } catch (TimeoutException | ElementClickInterceptedException ignored) { }
+    }
+
+    protected void scrollToCenter(By locator) {
+        ((JavascriptExecutor) driver).executeScript("""
+        arguments[0].scrollIntoView({
+            block: 'center',
+            inline: 'nearest'
+        });
+        """, driver.findElement(locator));
+    }
+
+    protected void waitUntilStable(By locator) {
+        wait.until(driver -> {
+            WebElement el1 = driver.findElement(locator);
+            Rectangle r1 = el1.getRect();
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+
+                return false;
+            }
+
+            WebElement el2 = driver.findElement(locator);
+            Rectangle r2 = el2.getRect();
+
+            return r1.equals(r2);
+        });
     }
 }

@@ -10,7 +10,7 @@ public abstract class BaseTest {
 
     @BeforeEach
     protected void setUp() {
-        driver = DriverFactory.createChromeDriver();
+        driver = DriverFactory.create();
     }
 
     @AfterEach

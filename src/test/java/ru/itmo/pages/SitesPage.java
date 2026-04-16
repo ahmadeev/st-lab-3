@@ -2,8 +2,6 @@ package ru.itmo.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import ru.itmo.framework.base.BasePage;
 
 import java.util.Arrays;
@@ -85,10 +83,9 @@ public class SitesPage extends BasePage {
     }
 
     public SitesPage requestSiteDeletion() {
-        WebElement deleteSiteButton = visible(DELETE_SITE_BUTTON);
-        new Actions(driver).scrollToElement(deleteSiteButton).perform();
-
-        deleteSiteButton.click();
+        scrollToCenter(DELETE_SITE_BUTTON);
+        waitUntilStable(DELETE_SITE_BUTTON);
+        clickable(DELETE_SITE_BUTTON).click();
 
         return this;
     }
