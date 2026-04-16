@@ -74,6 +74,7 @@ public class ThemesPage extends BasePage {
                 throw new TimeoutException();
             }
         } catch (TimeoutException e) {
+            // fallback на случай отличной верстки (если есть сайт)
             openPreviewDemo();
         }
     }
