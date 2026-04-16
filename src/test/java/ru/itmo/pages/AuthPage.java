@@ -80,8 +80,6 @@ public class AuthPage extends BasePage {
             profileLink = clickable(By.xpath("//header//div[contains(@class, 'item-wrapper')][.//a[@href='/me']]"));
         }
 
-        profileLink.click();
-
         new Actions(driver).moveToElement(profileLink).perform();
         clickable(LOGOUT_BUTTON).click();
     }
