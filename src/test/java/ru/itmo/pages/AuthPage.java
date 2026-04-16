@@ -2,6 +2,7 @@ package ru.itmo.pages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import ru.itmo.framework.config.TestConfig;
 import ru.itmo.framework.page.BasePage;
@@ -17,6 +18,15 @@ public class AuthPage extends BasePage {
 
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement submitButton;
+
+    @FindBy(xpath = "//header//a[contains(@href, '/me')]")
+    private WebElement profileLink;
+
+    @FindBy(xpath = "//header//button[contains(., 'Выйти')]")
+    private WebElement logoutButton;
+
+    @FindBy(xpath = "//a[contains(@href, '/log-in')]")
+    private WebElement loginLink;
 
     public AuthPage(WebDriver driver) {
         super(driver);
@@ -61,5 +71,23 @@ public class AuthPage extends BasePage {
 
     public boolean waitUntilAuthorized() {
         return titleDoesNotContain("Log In");
+    }
+
+    public AuthPage logout() {
+        visible(profileLink);
+        new Actions(driver).moveToElement(profileLink).perform();
+        clickable(logoutButton).click();
+
+        return this;
+    }
+
+    public boolean isLoggedOut() {
+        try {
+            visible(loginLink);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
