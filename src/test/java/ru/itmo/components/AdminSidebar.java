@@ -23,8 +23,8 @@ public class AdminSidebar extends BaseComponent {
         By linkLocator = getMenuElementLocator(link, false);
         By activeLinkLocator = getMenuElementLocator(link, true);
 
-        find(linkLocator).click();
-        find(activeLinkLocator);
+        clickable(linkLocator).click();
+        visible(activeLinkLocator);
     }
 
     public boolean isNavigatedTo(Links link) {

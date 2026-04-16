@@ -51,10 +51,6 @@ public abstract class BasePage {
         return driver.getCurrentUrl();
     }
 
-    public String getTitle() {
-        return driver.getTitle();
-    }
-
     protected WebElement find(By locator) {
         return wait.until(driver -> searchContext().findElement(locator));
     }
@@ -91,7 +87,7 @@ public abstract class BasePage {
         return wait.until(ExpectedConditions.urlContains(value));
     }
 
-    public void closeCookieBannerIfPresent() {
+    protected void closeCookieBannerIfPresent() {
         List<WebElement> buttons = driver.findElements(COOKIE_ACCEPT_BUTTON);
 
         if (buttons.isEmpty()) {

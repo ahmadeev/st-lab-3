@@ -5,6 +5,7 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.itmo.framework.config.TestConfig;
 
@@ -48,6 +49,14 @@ public abstract class BaseComponent {
             WebElement element = searchContext().findElement(locator);
 
             return element.isDisplayed() ? element : null;
+        });
+    }
+
+    protected WebElement clickable(By locator) {
+        return wait.until(driver -> {
+            WebElement element = searchContext().findElement(locator);
+
+            return ExpectedConditions.elementToBeClickable(element).apply(driver);
         });
     }
 
