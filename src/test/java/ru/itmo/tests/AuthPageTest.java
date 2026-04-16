@@ -1,12 +1,14 @@
 package ru.itmo.tests;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import ru.itmo.pages.AuthPage;
 import ru.itmo.support.BaseTest;
 
 public class AuthPageTest extends BaseTest {
     @Test
+    @Order(0)
     void shouldOpen() {
         AuthPage page = new AuthPage(driver);
 
@@ -17,6 +19,7 @@ public class AuthPageTest extends BaseTest {
     }
 
     @Test
+    @Order(1)
     void shouldLogIn() {
         AuthPage page = new AuthPage(driver);
 
@@ -30,6 +33,7 @@ public class AuthPageTest extends BaseTest {
     }
 
     @Test
+    @Order(2)
     void shouldLogOut() {
         AuthPage page = new AuthPage(driver);
 
