@@ -1,6 +1,7 @@
 package ru.itmo.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import ru.itmo.framework.base.BasePage;
 
@@ -11,6 +12,7 @@ public class ThemesPage extends BasePage {
     private static final Duration PAGE_TIMEOUT = Duration.ofSeconds(20);
     private static final By SELECT_TRIGGER = By.xpath("//div[contains(@class, 'theme')]//button[contains(@role, 'combobox')]");
     private static final By SELECT_OPTION = By.xpath("//div[contains(@class, 'theme')]//div[contains(@role, 'option') and contains(., 'Бесплатно')]");
+    private static final By POPOVER_OPTION = By.xpath("//div[contains(@class, 'components-popover')]//button[contains(@role, 'menuitem') and contains(., 'демо')]");
     private static final By FIRST_ITEM = By.xpath("//div[contains(@class, 'theme-card')]//a[contains(@href, '/theme/')]");
     private static final By PREVIEW_BUTTON = By.xpath("//button[contains(., 'Предпросмотр')]");
     private static final By PREVIEW_MODAL = By.xpath("//div[contains(@class, 'web-preview') and contains(@class, 'content')]");
@@ -55,11 +57,25 @@ public class ThemesPage extends BasePage {
         return this;
     }
 
+    public ThemesPage openPreviewDemo() {
+        clickable(POPOVER_OPTION).click();
+
+        return this;
+    }
+
     public void previewFirstFreeTheme() {
         openThemeFilter()
                 .selectFreeThemes()
                 .openFirstTheme()
                 .openPreview();
+
+        try {
+            if (!isPreviewed()) {
+                throw new TimeoutException();
+            }
+        } catch (TimeoutException e) {
+            openPreviewDemo();
+        }
     }
 
     public boolean isPreviewed() {
