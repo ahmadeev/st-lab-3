@@ -30,14 +30,16 @@ public class ThemesPage extends BasePage {
         super(driver, PAGE_TIMEOUT);
     }
 
-    public ThemesPage open() {
-        open(PAGE_PATH);
-
-        return this;
+    @Override
+    protected void ensureLoaded() {
+        visible(selectTrigger);
     }
 
-    public boolean isLoaded() {
-        return visible(selectTrigger).isDisplayed();
+    public ThemesPage open() {
+        open(PAGE_PATH);
+        ensureLoaded();
+
+        return this;
     }
 
     public void previewFirstFreeTheme() {

@@ -32,14 +32,16 @@ public class AuthPage extends BasePage {
         super(driver);
     }
 
-    public AuthPage open() {
-        open(PAGE_PATH);
-
-        return this;
+    @Override
+    protected void ensureLoaded() {
+        visible(usernameInput);
     }
 
-    public boolean isLoaded() {
-        return visible(usernameInput).isDisplayed();
+    public AuthPage open() {
+        open(PAGE_PATH);
+        ensureLoaded();
+
+        return this;
     }
 
     public void logIn() {

@@ -26,6 +26,8 @@ public abstract class BasePage {
         PageFactory.initElements(driver, this);
     }
 
+    protected abstract void ensureLoaded();
+
     protected void open(String path) {
         driver.get(TestConfig.get("base.url") + path);
         closeCookieBannerIfPresent();

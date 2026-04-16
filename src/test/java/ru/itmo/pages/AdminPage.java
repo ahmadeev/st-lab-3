@@ -16,15 +16,16 @@ public class AdminPage extends BasePage {
         this.sidebar = new AdminSidebar(driver, By.xpath("//div[contains(@class, 'sidebar')]"));
     }
 
+    @Override
+    public void ensureLoaded() {
+        sidebar.ensureLoaded();
+    }
+
     public AdminPage open() {
         open(PAGE_PATH);
         ensureLoaded();
 
         return this;
-    }
-
-    public void ensureLoaded() {
-        sidebar.ensureLoaded();
     }
 
     public void clickLinkTo(AdminSidebar.Links link) {

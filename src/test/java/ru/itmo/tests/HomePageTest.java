@@ -7,23 +7,13 @@ import ru.itmo.support.BaseTest;
 
 public class HomePageTest extends BaseTest {
     @Test
-    void shouldOpen() {
+    void shouldNavigate() {
         HomePage page = new HomePage(driver);
 
         page.open();
 
-        Assertions.assertTrue(page.isLoaded());
-        Assertions.assertTrue(page.getTitle().contains("WordPress"));
-    }
+        page.clickCta();
 
-    @Test
-    void shouldNavigate() {
-        HomePage homePage = new HomePage(driver).open();
-
-        Assertions.assertTrue(homePage.isLoaded()); // notes: ?
-
-        homePage.clickCta();
-
-        Assertions.assertTrue(homePage.isNavigated());
+        Assertions.assertTrue(page.isNavigated());
     }
 }

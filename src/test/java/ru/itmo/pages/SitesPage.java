@@ -25,14 +25,16 @@ public class SitesPage extends BasePage {
         super(driver);
     }
 
-    public SitesPage open() {
-        open(PAGE_PATH);
-
-        return this;
+    @Override
+    protected void ensureLoaded() {
+        visible(dropdownButton);
     }
 
-    public boolean isLoaded() {
-        return visible(dropdownButton).isDisplayed();
+    public SitesPage open() {
+        open(PAGE_PATH);
+        ensureLoaded();
+
+        return this;
     }
 
     public SitesPage startSiteCreation() {

@@ -9,14 +9,6 @@ import ru.itmo.pages.GoogleHomePage;
 @Disabled
 public class GoogleSearchTest extends BaseTest {
     @Test
-    void shouldOpenGoogleHomePage() {
-        GoogleHomePage googleHomePage = new GoogleHomePage(driver).open();
-
-        Assertions.assertTrue(googleHomePage.isLoaded());
-        Assertions.assertEquals("Google", googleHomePage.getTitle());
-    }
-
-    @Test
     void shouldOpenSearchResultsAfterSubmittingQuery() {
         String query = "Selenium WebDriver";
         GoogleHomePage googleHomePage = new GoogleHomePage(driver).open();

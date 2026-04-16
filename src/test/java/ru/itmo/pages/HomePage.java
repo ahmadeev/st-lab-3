@@ -15,14 +15,16 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
-    public HomePage open() {
-        open(PAGE_PATH);
-
-        return this;
+    @Override
+    protected void ensureLoaded() {
+        visible(ctaButton);
     }
 
-    public boolean isLoaded() {
-        return visible(ctaButton).isDisplayed();
+    public HomePage open() {
+        open(PAGE_PATH);
+        ensureLoaded();
+
+        return this;
     }
 
     public void clickCta() {

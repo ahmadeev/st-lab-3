@@ -16,14 +16,16 @@ public class GoogleHomePage extends BasePage {
         super(driver);
     }
 
-    public GoogleHomePage open() {
-        openAbsolute("https://www.google.com" + PAGE_PATH);
-
-        return this;
+    @Override
+    protected void ensureLoaded() {
+        visible(searchField);
     }
 
-    public boolean isLoaded() {
-        return visible(searchField).isDisplayed();
+    public GoogleHomePage open() {
+        openAbsolute("https://www.google.com" + PAGE_PATH);
+        ensureLoaded();
+
+        return this;
     }
 
     public boolean isSearchFieldReady() {
