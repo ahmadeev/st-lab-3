@@ -1,8 +1,7 @@
 package ru.itmo.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import ru.itmo.framework.base.BasePage;
 
 import java.time.Duration;
@@ -10,21 +9,11 @@ import java.time.Duration;
 public class ThemesPage extends BasePage {
     private static final String PAGE_PATH = "/theme";
     private static final Duration PAGE_TIMEOUT = Duration.ofSeconds(20);
-
-    @FindBy(xpath = "//div[contains(@class, 'theme')]//button[contains(@role, 'combobox')]")
-    private WebElement selectTrigger;
-
-    @FindBy(xpath = "//div[contains(@class, 'theme')]//div[contains(@role, 'option') and contains(., 'Бесплатно')]")
-    private WebElement selectOption;
-
-    @FindBy(xpath = "//div[contains(@class, 'theme-card')]//a[contains(@href, '/theme/')]")
-    private WebElement firstItem;
-
-    @FindBy(xpath = "//button[contains(., 'Предпросмотр')]")
-    private WebElement previewButton;
-
-    @FindBy(xpath = "//div[contains(@class, 'web-preview') and contains(@class, 'content')]")
-    private WebElement previewModal;
+    private static final By SELECT_TRIGGER = By.xpath("//div[contains(@class, 'theme')]//button[contains(@role, 'combobox')]");
+    private static final By SELECT_OPTION = By.xpath("//div[contains(@class, 'theme')]//div[contains(@role, 'option') and contains(., 'Бесплатно')]");
+    private static final By FIRST_ITEM = By.xpath("//div[contains(@class, 'theme-card')]//a[contains(@href, '/theme/')]");
+    private static final By PREVIEW_BUTTON = By.xpath("//button[contains(., 'Предпросмотр')]");
+    private static final By PREVIEW_MODAL = By.xpath("//div[contains(@class, 'web-preview') and contains(@class, 'content')]");
 
     public ThemesPage(WebDriver driver) {
         super(driver, PAGE_TIMEOUT);
@@ -32,7 +21,7 @@ public class ThemesPage extends BasePage {
 
     @Override
     protected void ensureLoaded() {
-        visible(selectTrigger);
+        visible(SELECT_TRIGGER);
     }
 
     public ThemesPage open() {
@@ -43,19 +32,13 @@ public class ThemesPage extends BasePage {
     }
 
     public void previewFirstFreeTheme() {
-        clickable(selectTrigger).click();
-        clickable(selectOption).click();
-        clickable(firstItem).click();
-        clickable(previewButton).click();
+        clickable(SELECT_TRIGGER).click();
+        clickable(SELECT_OPTION).click();
+        clickable(FIRST_ITEM).click();
+        clickable(PREVIEW_BUTTON).click();
     }
 
     public boolean isPreviewed() {
-        try {
-            visible(previewModal);
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return isVisible(PREVIEW_MODAL);
     }
 }

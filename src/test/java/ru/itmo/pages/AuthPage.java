@@ -1,32 +1,20 @@
 package ru.itmo.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
-import ru.itmo.framework.config.TestConfig;
 import ru.itmo.framework.base.BasePage;
+import ru.itmo.framework.config.TestConfig;
 
 public class AuthPage extends BasePage {
     private static final String PAGE_PATH = "/log-in";
-
-    @FindBy(xpath = "//input[contains(@autocomplete, 'username')]")
-    private WebElement usernameInput;
-
-    @FindBy(xpath = "//input[contains(@autocomplete, 'password')]")
-    private WebElement passwordInput;
-
-    @FindBy(xpath = "//button[@type='submit']")
-    private WebElement submitButton;
-
-    @FindBy(xpath = "//header//a[contains(@href, '/me')]")
-    private WebElement profileLink;
-
-    @FindBy(xpath = "//header//button[contains(., 'Выйти')]")
-    private WebElement logoutButton;
-
-    @FindBy(xpath = "//a[contains(@href, '/log-in')]")
-    private WebElement loginLink;
+    private static final By USERNAME_INPUT = By.xpath("//input[contains(@autocomplete, 'username')]");
+    private static final By PASSWORD_INPUT = By.xpath("//input[contains(@autocomplete, 'password')]");
+    private static final By SUBMIT_BUTTON = By.xpath("//button[@type='submit']");
+    private static final By PROFILE_LINK = By.xpath("//header//a[contains(@href, '/me')]");
+    private static final By LOGOUT_BUTTON = By.xpath("//header//button[contains(., 'Выйти')]");
+    private static final By LOGIN_LINK = By.xpath("//a[contains(@href, '/log-in')]");
 
     public AuthPage(WebDriver driver) {
         super(driver);
@@ -34,7 +22,7 @@ public class AuthPage extends BasePage {
 
     @Override
     protected void ensureLoaded() {
-        visible(usernameInput);
+        visible(USERNAME_INPUT);
     }
 
     public AuthPage open() {
@@ -52,21 +40,25 @@ public class AuthPage extends BasePage {
     }
 
     public AuthPage enterEmail(String email) {
-        visible(usernameInput).clear();
-        usernameInput.sendKeys(email);
+        WebElement field = visible(USERNAME_INPUT);
+
+        field.clear();
+        field.sendKeys(email);
 
         return this;
     }
 
     public AuthPage enterPassword(String password) {
-        visible(passwordInput).clear();
-        passwordInput.sendKeys(password);
+        WebElement field = visible(PASSWORD_INPUT);
+
+        field.clear();
+        field.sendKeys(password);
 
         return this;
     }
 
     public AuthPage clickSubmit() {
-        clickable(submitButton).click();
+        clickable(SUBMIT_BUTTON).click();
 
         return this;
     }
@@ -76,20 +68,15 @@ public class AuthPage extends BasePage {
     }
 
     public AuthPage logout() {
-        visible(profileLink);
+        WebElement profileLink = visible(PROFILE_LINK);
+
         new Actions(driver).moveToElement(profileLink).perform();
-        clickable(logoutButton).click();
+        clickable(LOGOUT_BUTTON).click();
 
         return this;
     }
 
     public boolean isLoggedOut() {
-        try {
-            visible(loginLink);
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        return isVisible(LOGIN_LINK);
     }
 }

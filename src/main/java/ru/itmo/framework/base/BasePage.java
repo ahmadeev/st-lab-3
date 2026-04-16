@@ -6,7 +6,6 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.itmo.framework.config.TestConfig;
@@ -31,8 +30,6 @@ public abstract class BasePage {
     protected BasePage(WebDriver driver, Duration timeout) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, timeout);
-
-        PageFactory.initElements(driver, this);
     }
 
     protected abstract void ensureLoaded();
@@ -70,16 +67,8 @@ public abstract class BasePage {
         });
     }
 
-    protected WebElement visible(WebElement element) {
-        return wait.until(ExpectedConditions.visibilityOf(element));
-    }
-
     protected WebElement clickable(By locator) {
         return wait.until(ExpectedConditions.elementToBeClickable(locator));
-    }
-
-    protected WebElement clickable(WebElement element) {
-        return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
     protected boolean isVisible(By locator) {
