@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import ru.itmo.framework.config.TestConfig;
-import ru.itmo.framework.page.BasePage;
+import ru.itmo.framework.base.BasePage;
 
 public class AuthPage extends BasePage {
     private static final String PAGE_PATH = "/log-in";

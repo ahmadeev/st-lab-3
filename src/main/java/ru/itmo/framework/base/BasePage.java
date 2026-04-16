@@ -1,4 +1,4 @@
-package ru.itmo.framework.page;
+package ru.itmo.framework.base;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.PageFactory;
