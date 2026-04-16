@@ -56,11 +56,7 @@ public abstract class BasePage {
     }
 
     protected WebElement visible(By locator) {
-        return wait.until(driver -> {
-            WebElement element = searchContext().findElement(locator);
-
-            return element.isDisplayed() ? element : null;
-        });
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     protected WebElement clickable(By locator) {

@@ -1,6 +1,7 @@
 package ru.itmo.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -67,13 +68,22 @@ public class AuthPage extends BasePage {
         return titleDoesNotContain("Log In");
     }
 
-    public AuthPage logout() {
-        WebElement profileLink = visible(PROFILE_LINK);
+    public void logout() {
+        driver.get(TestConfig.get("base.url") + "/sites");
+
+        WebElement profileLink;
+
+        try {
+            profileLink = clickable(By.xpath("//header//a[contains(@href, '/me')]"));
+        } catch (TimeoutException e) {
+            // fallback на случай отличной верстки (если есть сайт)
+            profileLink = clickable(By.xpath("//header//div[contains(@class, 'item-wrapper')][.//a[@href='/me']]"));
+        }
+
+        profileLink.click();
 
         new Actions(driver).moveToElement(profileLink).perform();
         clickable(LOGOUT_BUTTON).click();
-
-        return this;
     }
 
     public boolean isLoggedOut() {
