@@ -30,12 +30,23 @@ public class GoogleHomePage extends BasePage {
         return clickable(SEARCH_FIELD).isEnabled();
     }
 
-    public void search(String query) {
+    public GoogleHomePage enterSearchQuery(String query) {
         WebElement field = visible(SEARCH_FIELD);
 
         field.clear();
         field.sendKeys(query);
-        field.sendKeys(Keys.ENTER);
+
+        return this;
+    }
+
+    public GoogleHomePage submitSearch() {
+        visible(SEARCH_FIELD).sendKeys(Keys.ENTER);
+
+        return this;
+    }
+
+    public void search(String query) {
+        enterSearchQuery(query).submitSearch();
     }
 
     public boolean areResultsOpenedFor(String query) {

@@ -31,11 +31,35 @@ public class ThemesPage extends BasePage {
         return this;
     }
 
-    public void previewFirstFreeTheme() {
+    public ThemesPage openThemeFilter() {
         clickable(SELECT_TRIGGER).click();
+
+        return this;
+    }
+
+    public ThemesPage selectFreeThemes() {
         clickable(SELECT_OPTION).click();
+
+        return this;
+    }
+
+    public ThemesPage openFirstTheme() {
         clickable(FIRST_ITEM).click();
+
+        return this;
+    }
+
+    public ThemesPage openPreview() {
         clickable(PREVIEW_BUTTON).click();
+
+        return this;
+    }
+
+    public void previewFirstFreeTheme() {
+        openThemeFilter()
+                .selectFreeThemes()
+                .openFirstTheme()
+                .openPreview();
     }
 
     public boolean isPreviewed() {

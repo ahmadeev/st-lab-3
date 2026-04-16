@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 public class SitesPage extends BasePage {
     private static final String PAGE_PATH = "/sites";
+    private static final String WORDPRESS_DOMAIN = "wordpress.com";
     private static final By DROPDOWN_BUTTON = By.xpath("//div[contains(@class, 'dropdown')]//button");
     private static final By CREATE_SITE_LINK = By.xpath("//div[contains(@class, 'popover')]//a[contains(@href, 'ai-site-builder')]");
     private static final By CHAT_TEXT_AREA = By.xpath("//div[contains(@class, 'chat-input')]//textarea");
@@ -36,37 +37,77 @@ public class SitesPage extends BasePage {
         return this;
     }
 
-    public SitesPage startSiteCreation() {
+    public SitesPage openCreationMenu() {
         clickable(DROPDOWN_BUTTON).click();
+
+        return this;
+    }
+
+    public SitesPage chooseAiSiteBuilder() {
         clickable(CREATE_SITE_LINK).click();
 
         return this;
+    }
+
+    public SitesPage startSiteCreation() {
+        return openCreationMenu().chooseAiSiteBuilder();
     }
 
     public boolean isNavigatedToChat() {
         return isVisible(CHAT_TEXT_AREA);
     }
 
-    public String startSiteDeletion() {
-        final String wpUrl = "wordpress.com";
-
+    public SitesPage openSiteActionsMenu() {
         clickable(SHOW_MENU_BUTTON).click();
+
+        return this;
+    }
+
+    public SitesPage openSettings() {
         clickable(SETTINGS_MENU_OPTION).click();
 
-        // todo
+        return this;
+    }
+
+    public String getCurrentSiteName() {
         String siteName = Arrays.stream(currentUrl().split("/"))
-                .filter((s) -> s.endsWith(wpUrl) && !s.startsWith(wpUrl))
+                .filter((s) -> s.endsWith(WORDPRESS_DOMAIN) && !s.startsWith(WORDPRESS_DOMAIN))
                 .toList()
                 .get(0);
 
+        return siteName;
+    }
+
+    public SitesPage waitForSettingsPage() {
         visible(SETTINGS_ANCHOR);
 
+        return this;
+    }
+
+    public SitesPage requestSiteDeletion() {
         WebElement deleteSiteButton = visible(DELETE_SITE_BUTTON);
         new Actions(driver).scrollToElement(deleteSiteButton).perform();
 
         deleteSiteButton.click();
+
+        return this;
+    }
+
+    public SitesPage confirmSiteDeletion(String siteName) {
         visible(DELETE_MODAL_INPUT).sendKeys(siteName);
         clickable(DELETE_MODAL_BUTTON).click();
+
+        return this;
+    }
+
+    public String startSiteDeletion() {
+        openSiteActionsMenu()
+                .openSettings()
+                .waitForSettingsPage();
+
+        String siteName = getCurrentSiteName();
+
+        requestSiteDeletion().confirmSiteDeletion(siteName);
 
         return siteName;
     }
