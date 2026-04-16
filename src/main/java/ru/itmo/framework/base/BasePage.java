@@ -1,6 +1,11 @@
 package ru.itmo.framework.base;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,9 +16,13 @@ import java.util.List;
 
 public abstract class BasePage {
     private static final Duration DEFAULT_TIMEOUT = TestConfig.getDurationSeconds("page.timeout.seconds", 10);
+    private static final Duration COOKIE_BANNER_TIMEOUT = Duration.ofSeconds(3);
+    private static final By COOKIE_ACCEPT_BUTTON = By.xpath(
+            "//button[contains(., 'Принять') or contains(., 'Accept') or contains(., 'Соглас')]"
+    );
 
     protected final WebDriver driver;
-    private final WebDriverWait wait;
+    protected final WebDriverWait wait;
 
     protected BasePage(WebDriver driver) {
         this(driver, DEFAULT_TIMEOUT);
@@ -27,6 +36,10 @@ public abstract class BasePage {
     }
 
     protected abstract void ensureLoaded();
+
+    protected SearchContext searchContext() {
+        return driver;
+    }
 
     protected void open(String path) {
         driver.get(TestConfig.get("base.url") + path);
@@ -45,8 +58,16 @@ public abstract class BasePage {
         return driver.getTitle();
     }
 
+    protected WebElement find(By locator) {
+        return wait.until(driver -> searchContext().findElement(locator));
+    }
+
     protected WebElement visible(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        return wait.until(driver -> {
+            WebElement element = searchContext().findElement(locator);
+
+            return element.isDisplayed() ? element : null;
+        });
     }
 
     protected WebElement visible(WebElement element) {
@@ -59,6 +80,14 @@ public abstract class BasePage {
 
     protected WebElement clickable(WebElement element) {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    protected boolean isVisible(By locator) {
+        try {
+            return visible(locator).isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     protected boolean titleContains(String value) {
@@ -74,22 +103,20 @@ public abstract class BasePage {
     }
 
     public void closeCookieBannerIfPresent() {
-        By acceptButton = By.xpath("//button[contains(., 'Принять') or contains(., 'Accept') or contains(., 'Соглас')]");
-
-        List<WebElement> buttons = driver.findElements(acceptButton);
+        List<WebElement> buttons = driver.findElements(COOKIE_ACCEPT_BUTTON);
 
         if (buttons.isEmpty()) {
             return;
         }
 
         try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+            WebDriverWait shortWait = new WebDriverWait(driver, COOKIE_BANNER_TIMEOUT);
 
-            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(acceptButton));
+            WebElement button = shortWait.until(ExpectedConditions.elementToBeClickable(COOKIE_ACCEPT_BUTTON));
 
             button.click();
 
-            wait.until(ExpectedConditions.invisibilityOf(button));
+            shortWait.until(ExpectedConditions.invisibilityOf(button));
         } catch (TimeoutException | ElementClickInterceptedException ignored) { }
     }
 }
