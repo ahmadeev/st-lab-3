@@ -4,10 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import ru.itmo.framework.base.BasePage;
 
+import java.time.Duration;
 import java.util.Arrays;
 
 public class SitesPage extends BasePage {
     private static final String PAGE_PATH = "/sites";
+    private static final Duration PAGE_TIMEOUT = Duration.ofSeconds(20);
     private static final String WORDPRESS_DOMAIN = "wordpress.com";
     private static final By DROPDOWN_BUTTON = By.xpath("//div[contains(@class, 'dropdown')]//button");
     private static final By CREATE_SITE_LINK = By.xpath("//div[contains(@class, 'popover')]//a[contains(@href, 'ai-site-builder')]");
@@ -20,7 +22,7 @@ public class SitesPage extends BasePage {
     private static final By DELETE_MODAL_BUTTON = By.xpath("//div[contains(@role, 'dialog')]//button[contains(., 'Удалить')]");
 
     public SitesPage(WebDriver driver) {
-        super(driver);
+        super(driver, PAGE_TIMEOUT);
     }
 
     @Override
