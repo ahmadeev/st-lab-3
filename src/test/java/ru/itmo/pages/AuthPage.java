@@ -59,7 +59,7 @@ public class AuthPage extends BasePage {
     }
 
     public AuthPage clickSubmit() {
-        clickable(SUBMIT_BUTTON).click();
+        click(SUBMIT_BUTTON);
 
         return this;
     }
@@ -81,7 +81,8 @@ public class AuthPage extends BasePage {
         }
 
         new Actions(driver).moveToElement(profileLink).perform();
-        clickable(LOGOUT_BUTTON).click();
+
+        click(LOGOUT_BUTTON);
     }
 
     public boolean isLoggedOut() {

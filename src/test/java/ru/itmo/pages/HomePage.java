@@ -25,7 +25,7 @@ public class HomePage extends BasePage {
     }
 
     public void clickCta() {
-        clickable(CTA_BUTTON).click();
+        click(CTA_BUTTON);
     }
 
     public boolean isNavigated() {

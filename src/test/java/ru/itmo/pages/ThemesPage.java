@@ -34,31 +34,31 @@ public class ThemesPage extends BasePage {
     }
 
     public ThemesPage openThemeFilter() {
-        clickable(SELECT_TRIGGER).click();
+        click(SELECT_TRIGGER);
 
         return this;
     }
 
     public ThemesPage selectFreeThemes() {
-        clickable(SELECT_OPTION).click();
+        click(SELECT_OPTION);
 
         return this;
     }
 
     public ThemesPage openFirstTheme() {
-        clickable(FIRST_ITEM).click();
+        click(FIRST_ITEM);
 
         return this;
     }
 
     public ThemesPage openPreview() {
-        clickable(PREVIEW_BUTTON).click();
+        click(PREVIEW_BUTTON);
 
         return this;
     }
 
     public ThemesPage openPreviewDemo() {
-        clickable(POPOVER_OPTION).click();
+        click(POPOVER_OPTION);
 
         return this;
     }

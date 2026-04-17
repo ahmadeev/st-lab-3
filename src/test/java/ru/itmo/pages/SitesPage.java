@@ -36,13 +36,13 @@ public class SitesPage extends BasePage {
     }
 
     public SitesPage openCreationMenu() {
-        clickable(DROPDOWN_BUTTON).click();
+        click(DROPDOWN_BUTTON);
 
         return this;
     }
 
     public SitesPage chooseAiSiteBuilder() {
-        clickable(CREATE_SITE_LINK).click();
+        click(CREATE_SITE_LINK);
 
         return this;
     }
@@ -56,13 +56,13 @@ public class SitesPage extends BasePage {
     }
 
     public SitesPage openSiteActionsMenu() {
-        clickable(SHOW_MENU_BUTTON).click();
+        click(SHOW_MENU_BUTTON);
 
         return this;
     }
 
     public SitesPage openSettings() {
-        clickable(SETTINGS_MENU_OPTION).click();
+        click(SETTINGS_MENU_OPTION);
 
         return this;
     }
@@ -83,16 +83,14 @@ public class SitesPage extends BasePage {
     }
 
     public SitesPage requestSiteDeletion() {
-        scrollToCenter(DELETE_SITE_BUTTON);
-        waitUntilStable(DELETE_SITE_BUTTON);
-        clickable(DELETE_SITE_BUTTON).click();
+        click(DELETE_SITE_BUTTON);
 
         return this;
     }
 
     public SitesPage confirmSiteDeletion(String siteName) {
         visible(DELETE_MODAL_INPUT).sendKeys(siteName);
-        clickable(DELETE_MODAL_BUTTON).click();
+        click(DELETE_MODAL_BUTTON);
 
         return this;
     }

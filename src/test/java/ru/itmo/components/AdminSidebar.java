@@ -23,7 +23,7 @@ public class AdminSidebar extends BaseComponent {
         By linkLocator = getMenuElementLocator(link, false);
         By activeLinkLocator = getMenuElementLocator(link, true);
 
-        clickable(linkLocator).click();
+        click(linkLocator);
         visible(activeLinkLocator);
     }
 
