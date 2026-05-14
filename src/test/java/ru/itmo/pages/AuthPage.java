@@ -41,7 +41,7 @@ public class AuthPage extends BasePage {
     }
 
     public AuthPage enterEmail(String email) {
-        WebElement field = visible(USERNAME_INPUT);
+        WebElement field = clickable(USERNAME_INPUT);
 
         field.clear();
         field.sendKeys(email);
@@ -50,7 +50,7 @@ public class AuthPage extends BasePage {
     }
 
     public AuthPage enterPassword(String password) {
-        WebElement field = visible(PASSWORD_INPUT);
+        WebElement field = clickable(PASSWORD_INPUT);
 
         field.clear();
         field.sendKeys(password);
