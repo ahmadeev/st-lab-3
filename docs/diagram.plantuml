@@ -1,0 +1,38 @@
+@startuml
+left to right direction
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam actorStyle awesome
+
+actor "Гость" as Guest
+actor "Пользователь" as User
+
+rectangle "WordPress.com" {
+    usecase "UC-01\nПереход к странице\nначала работы" as UC01
+    usecase "UC-02\nАвторизация\nпользователя" as UC02
+    usecase "UC-03\nВыход пользователя\nиз аккаунта" as UC03
+    usecase "UC-04\nСоздание сайта\nс ИИ" as UC04
+    usecase "UC-05\nУдаление сайта" as UC05
+    usecase "UC-06\nНавигация по категориям\nличного кабинета" as UC06
+    usecase "UC-07\nПредпросмотр\nбесплатной темы" as UC07
+}
+
+Guest --> UC01
+Guest --> UC02
+
+User --> UC03
+User --> UC04
+User --> UC05
+User --> UC06
+User --> UC07
+
+note right of UC06
+  Категории:
+  - Сайты
+  - Домен
+  - Темы
+  - Плагины
+end note
+
+@enduml
